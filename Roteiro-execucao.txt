@@ -1,0 +1,64 @@
+1. Registrar Serviços no Azure
+az provider register --namespace Microsoft.Web
+az provider register --namespace Microsoft.Insights
+az provider register --namespace Microsoft.OperationalInsights
+az provider register --namespace Microsoft.ServiceLinker
+az extension add --name application-insights
+
+2. Realizar Fork e Clonar Repositório GitHub
+Link do repositório: https://github.com/pdroandrad/cp5-skyaid-devops.git
+git clone https://github.com/pdroandrad/cp5-skyaid-devops.git
+
+3. Criar Azure SQL Server (PowerShell)
+cd cp5-skyaid-devops
+.\create-sql-server.ps1
+
+4. Criar Tabelas no Banco
+sqlcmd -S tcp:sqlserver-rm558186.database.windows.net,1433 -U admsql -P 'Fiap@2tdsvms' -d skyaiddb -i script_bd.sql
+
+5. Verificar Extensão do Application Insights (Bash)
+az extension list -o table
+
+6. Conceder privilégio de execução e rodar script da aplicação
+cd cp5-skyaid-devops
+chmod +x deploy-skyaid.sh
+./deploy-skyaid.sh --login-with-GitHub
+
+7. Configurar Secrets no GitHub
+SPRING_DATASOURCE_USERNAME="admsql"
+SPRING_DATASOURCE_PASSWORD="Fiap@2tdsvms"
+SPRING_DATASOURCE_URL="jdbc:sqlserver://sqlserver-rm558186.database.windows.net:1433;database=skyaiddb;user=admsql@sqlserver-rm558186;password={your_password_here};encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
+
+8. Editar Workflow YAML (GitHub Actions)
+      env: 
+        SPRING_DATASOURCE_URL: ${{ secrets.SPRING_DATASOURCE_URL }}
+        SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
+        SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
+
+9. No Portal da Azure acessar o banco de dados SQL criado e fazer login no Editor de Consultas com login e senha. Caso o IP não esteja liberado, acessar SQL Server > Segurança > Rede > Adicionar o endereço IPv4 do cliente > Salvar
+
+10. Acessar no browser o endereço https://skyaid-rm558186.azurewebsites.net/swagger/index.html para realização de testes.
+
+11. Realizar testes no Swagger:
+
+Exemplos de Drone para inserir (POST):
+
+{
+  "identificador": "D100",
+  "modelo": "Flying X",
+  "status": "DISPONIVEL",
+  "operadorId": 1
+}
+
+{
+  "identificador": "D101",
+  "modelo": "X-950",
+  "status": "DISPONIVEL",
+  "operadorId": 2
+}
+
+12. Verificar no editor de consultas (Banco de dados SQL, no portal da Azure) as operações CRUD:
+
+SELECT * FROM DRONES;
+
+
