@@ -35,30 +35,47 @@ SPRING_DATASOURCE_URL="jdbc:sqlserver://sqlserver-rm558186.database.windows.net:
         SPRING_DATASOURCE_USERNAME: ${{ secrets.SPRING_DATASOURCE_USERNAME }}
         SPRING_DATASOURCE_PASSWORD: ${{ secrets.SPRING_DATASOURCE_PASSWORD }}
 
-9. No Portal da Azure acessar o banco de dados SQL criado e fazer login no Editor de Consultas com login e senha. Caso o IP não esteja liberado, acessar SQL Server > Segurança > Rede > Adicionar o endereço IPv4 do cliente > Salvar
+9. No Portal da Azure acessar o banco de dados SQL criado e fazer login no Editor de Consultas com login e senha.
 
 10. Acessar no browser o endereço https://skyaid-rm558186.azurewebsites.net/swagger/index.html para realização de testes.
 
 11. Realizar testes no Swagger:
 
-Exemplos de Drone para inserir (POST):
+Exemplos de Operadores para inserir (POST):
 
 {
-  "identificador": "D100",
-  "modelo": "Flying X",
-  "status": "DISPONIVEL",
-  "operadorId": 1
+  "nome": "Pedro Andrade",
+  "email": "pedro@exemplo.com",
+  "senha": "123456",
+  "idBase": 1
 }
 
 {
-  "identificador": "D101",
-  "modelo": "X-950",
-  "status": "DISPONIVEL",
-  "operadorId": 2
+  "nome": "Victor Alves",
+  "email": "victor@exemplo.com",
+  "senha": "123456",
+  "idBase": 1
+}
+
+{
+  "nome": "Ricardo Tavares",
+  "email": "ricardo@exemplo.com",
+  "senha": "123456",
+  "idBase": 1
+}
+
+Exemplo de atualização de email de operador (PUT):
+
+Id: 1
+{
+  "nome": "Pedro Andrade",
+  "email": "pedroandrade@exemplo.com",
+  "senha": "123456",
+  "idBase": 1
 }
 
 12. Verificar no editor de consultas (Banco de dados SQL, no portal da Azure) as operações CRUD:
 
-SELECT * FROM DRONES;
+SELECT * FROM OPERADORES;
 
 
